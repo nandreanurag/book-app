@@ -1,0 +1,139 @@
+<div class="container">
+  <h1 class="text-center my-4">Book List</h1>
+
+  <!-- Search box -->
+  <form [formGroup]="searchForm" class="form-inline justify-content-center mb-4">
+    <div class="form-group">
+      <label for="searchTerm" class="mr-2">Search:</label>
+      <input type="text" formControlName="searchTerm" id="searchTerm" name="searchTerm" class="form-control mr-2"
+        placeholder="Search by Title or Author">
+      <button type="button" class="btn btn-primary search-button" (click)="searchBooks()">Search</button>
+    </div>
+  </form>
+
+  <!-- Add new book button -->
+  <div class="row justify-content-center">
+    <div class="col-md-4 text-center">
+      <button type="button" class="btn btn-success" (click)="showBookDetails()">Show Book Details</button>
+    </div>
+    <div class="col-md-4 text-center">
+      <button type="button" class="btn btn-success" (click)="openAddBookModal()">Add New Book</button>
+    </div>
+  </div>
+  
+
+  <!-- Loading spinner -->
+  <div class="text-center" *ngIf="isLoading">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Book list table -->
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th (click)="sortBooks('title')">Title
+        </th>
+        <th *ngIf="isShowDetails" (click)="sortBooks('author')">Author</th>
+        <th *ngIf="isShowDetails" (click)="sortBooks('year')">Year of Publication</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="books.length > 0; else noBooks">
+        <tr *ngFor="let book of books">
+          <td  class="BookTitle" (click)="showDetails(book.id,viewBookModal)">{{ book.title }}</td>
+          <td *ngIf="isShowDetails">{{ book.author }}</td>
+          <td *ngIf="isShowDetails">{{ book.year }}</td>
+          <!-- <td><button type="button" class="btn btn-link" (click)="showBookDetails()">Show</button></td> -->
+          <td>
+            <!-- <button type="button" class="btn btn-link" (click)="updateBook(book)">Edit</button> -->
+            <button type="button" class="btn btn-danger" (click)="deleteBook(book.id)">Delete</button>
+          </td>
+        </tr>
+      </ng-container>
+      <ng-template #noBooks>
+        <tr>
+          <td colspan="4" class="text-center">No books found.</td>
+        </tr>
+      </ng-template>
+      <ng-template #viewBookModal let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Book Details for Id</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="viewBookForm" (ngSubmit)="updateBook()">
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="bookId">Id:</label>
+                  <input type="number" class="form-control" formControlName="bookId"  id="bookId" value="selectedBook.id" readonly required>
+                </div>
+                <div class="form-group">
+                  <label for="titleInput">Title:</label>
+                  <input type="text" class="form-control" formControlName="title" required id="titleInput" value="selectedBook.title" placeholder="Enter title" required>
+                </div>
+                <div class="form-group">
+                  <label for="authorInput">Author:</label>
+                  <input type="text" class="form-control" formControlName="author" required id="authorInput" value="selectedBook.author" placeholder="Enter author" required>
+                </div>
+                <div class="form-group">
+                  <label for="yearInput">Year of Publication:</label>
+                  <input type="number" class="form-control" required formControlName="year" id="yearInput" value="selectedBook.year" placeholder="Enter year of publication" required>
+                </div>
+              </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('Cancel click')">Cancel</button>
+          <button type="button" class="btn btn-outline-primary" [disabled]="viewBookForm.invalid" (click)="updateBook(); modal.close('Save click')">Update</button>
+        </div>
+      </ng-template>
+    </tbody>
+  </table>
+
+  <!-- Error message -->
+  <div class="text-center" *ngIf="errorMsg">
+    <div class="alert alert-danger">{{ errorMsg }}</div>
+  </div>
+  
+  <ng-template #addBookModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add Book</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="addBookForm" (ngSubmit)="addBook()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="titleInput">Title:</label>
+            <input type="text" class="form-control" formControlName="title" required id="titleInput"
+              placeholder="Enter title" required>
+          </div>
+          <div class="form-group">
+            <label for="authorInput">Author:</label>
+            <input type="text" class="form-control" formControlName="author" required id="authorInput"
+              placeholder="Enter author" required>
+          </div>
+          <div class="form-group">
+            <label for="yearInput">Year:</label>
+            <input type="number" class="form-control" required formControlName="year" id="yearInput"
+              placeholder="Enter year of publication" required>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('Cancel click')">Cancel</button>
+      <button type="button" class="btn btn-outline-primary" (click)="addBook(); modal.close('Save click')">Save</button>
+    </div>
+  </ng-template>
+
+
+
+</div>

@@ -1,0 +1,46 @@
+table {
+  margin-top: 2rem;
+}
+
+.alert {
+  margin-top: 1rem;
+}
+
+.modal-body {
+  font-size: 1.2rem;
+}
+
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.search-button {
+  margin-top: 2px;
+}
+
+.BookTitle {
+  font-family: Arial, sans-serif;
+
+  /* Set the font weight to bold */
+  font-style: italic;
+
+  /* Set the font size to 36 pixels */
+  font-size: 25px;
+}
+
+.add-container {
+  background-color: rgb(244, 247, 249);
+}
+
+input.ng-invalid {
+
+  border: 1px solid red
+}
+
+label {
+  font-weight: bold;
+}
